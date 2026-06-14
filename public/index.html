@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Weather Cow - ກວດສອບສະພາບອາກາດງ່າຍໆ ກັບໝູ່ງົວ">
+    <title>🐄 Weather Cow — ສະພາບອາກາດ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ພາກສ່ວນພື້ນຫຼັງ Animated -->
+    <div class="bg-effects">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header" id="header">
+            <div class="logo">
+                <span class="logo-emoji">🐄</span>
+                <div>
+                    <h1>Weather Cow</h1>
+                    <p class="subtitle">ກວດສອບສະພາບອາກາດງ່າຍໆ ກັບໝູ່ງົວ</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- ຊ່ອງຄົ້ນຫາ -->
+        <section class="search-section" id="search-section">
+            <div class="search-box">
+                <div class="search-icon">🔍</div>
+                <input 
+                    type="text" 
+                    id="city-input" 
+                    placeholder="ພິມຊື່ເມືອງ... (ເຊັ່ນ: Vientiane, Bangkok, Tokyo)" 
+                    autocomplete="off"
+                >
+                <button id="search-btn" onclick="searchWeather()">ຄົ້ນຫາ</button>
+            </div>
+            <div class="quick-cities">
+                <span class="quick-city" onclick="quickSearch('Vientiane')">🇱🇦 Vientiane</span>
+                <span class="quick-city" onclick="quickSearch('Bangkok')">🇹🇭 Bangkok</span>
+                <span class="quick-city" onclick="quickSearch('Tokyo')">🇯🇵 Tokyo</span>
+                <span class="quick-city" onclick="quickSearch('London')">🇬🇧 London</span>
+                <span class="quick-city" onclick="quickSearch('New York')">🇺🇸 New York</span>
+            </div>
+        </section>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="loading-cow">🐄</div>
+            <p>ກຳລັງຄົ້ນຫາ... ກະລຸນາລໍຖ້າຈັກບຶດ</p>
+        </div>
+
+        <!-- Error -->
+        <div class="error-box" id="error-box">
+            <div class="error-cow">
+                <pre id="error-cow-art"></pre>
+            </div>
+            <p id="error-message"></p>
+        </div>
+
+        <!-- ຜົນລັບສະພາບອາກາດ -->
+        <main class="weather-result" id="weather-result">
+            <!-- Cow Speech -->
+            <section class="cow-section" id="cow-section">
+                <pre id="cow-speech"></pre>
+            </section>
+
+            <!-- ການ໌ດຫຼັກ -->
+            <section class="main-card" id="main-card">
+                <div class="card-header">
+                    <div class="city-info">
+                        <h2 id="result-city"></h2>
+                        <span class="fetch-time" id="fetch-time"></span>
+                    </div>
+                    <div class="weather-icon" id="weather-icon"></div>
+                </div>
+                <div class="temp-display">
+                    <span class="temp-value" id="temp-value"></span>
+                    <span class="temp-unit">°C</span>
+                </div>
+                <p class="weather-desc" id="weather-desc"></p>
+                <p class="feels-like" id="feels-like"></p>
+            </section>
+
+            <!-- ລາຍລະອຽດ -->
+            <section class="details-grid" id="details-grid">
+                <div class="detail-card" id="detail-humidity">
+                    <div class="detail-icon">💧</div>
+                    <div class="detail-label">ຄວາມຊຸ່ມ</div>
+                    <div class="detail-value" id="val-humidity"></div>
+                </div>
+                <div class="detail-card" id="detail-wind">
+                    <div class="detail-icon">💨</div>
+                    <div class="detail-label">ລົມ</div>
+                    <div class="detail-value" id="val-wind"></div>
+                </div>
+                <div class="detail-card" id="detail-uv">
+                    <div class="detail-icon">☀️</div>
+                    <div class="detail-label">UV Index</div>
+                    <div class="detail-value" id="val-uv"></div>
+                </div>
+                <div class="detail-card" id="detail-visibility">
+                    <div class="detail-icon">👁️</div>
+                    <div class="detail-label">ທັດສະນະວິໄສ</div>
+                    <div class="detail-value" id="val-visibility"></div>
+                </div>
+                <div class="detail-card" id="detail-pressure">
+                    <div class="detail-icon">🌡️</div>
+                    <div class="detail-label">ຄວາມກົດອາກາດ</div>
+                    <div class="detail-value" id="val-pressure"></div>
+                </div>
+                <div class="detail-card" id="detail-cloud">
+                    <div class="detail-icon">☁️</div>
+                    <div class="detail-label">ເມກປົກຄຸມ</div>
+                    <div class="detail-value" id="val-cloud"></div>
+                </div>
+            </section>
+
+            <!-- Forecast 3 ມື້ -->
+            <section class="forecast-section" id="forecast-section">
+                <h3 class="section-title">📅 ພະຍາກອນ 3 ມື້</h3>
+                <div class="forecast-grid" id="forecast-grid">
+                    <!-- JS will render -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🐄 Weather Cow — ສ້າງດ້ວຍ ❤️ | ຂໍ້ມູນຈາກ wttr.in</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
