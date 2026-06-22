@@ -1,9 +1,22 @@
 {
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/weather/:city",
-      "destination": "/api/weather/:city"
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
   ],
-  "outputDirectory": "public"
+  "routes": [
+    {
+      "src": "/api/weather/(?<city>[^/]+)",
+      "dest": "/api/weather/[city].js?city=$city"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
 }
