@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/weather/:city",
+      "destination": "/api/weather/:city"
+    }
+  ],
+  "outputDirectory": "public"
+}
